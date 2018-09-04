@@ -43,7 +43,7 @@ app.post('/api/v1/bucketList', (request, response) => {
   database('bucket_list')
   .insert(listItem)
   .returning('*')
-  .then((butts) => response.status(201).json(butts))
+  .then((list_item) => response.status(201).json(list_item))
 })
 
 app.delete('/api/v1/bucketList', (request, response) => {

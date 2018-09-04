@@ -68,7 +68,7 @@ const appendListItem = (event, postInfo) => {
   // let titleData = $('.input--title');
   // let descriptionData = $('.input--description');
   $('.list').append(`
-  <div id= ${item.id}>
+  <div id= ${postInfo.id}>
     <h2>title: ${postInfo.title} </h2>
     <p>description: ${postInfo.description} </p>
     <button class="card--delete"> Delete </button>
