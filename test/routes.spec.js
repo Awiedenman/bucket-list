@@ -55,7 +55,6 @@ describe('API Routes', () => {
         .end((error, response) => {
           response.should.have.status(422);
           response.should.be.html;
-          // response.body.error.should.equal('Expected format: {title: <STRING>, description: <TEXT> } You are missing a "description" property')
           done();
         })
     });
@@ -77,8 +76,6 @@ describe('API Routes', () => {
         .delete('/api/v1/list_items/1')
         .end((error, response) => {
           response.should.have.status(404);
-          // response.should.be.json;
-          // response.body.error.should.equal('could not find list item with id: "1")
           done();
         })
     });
