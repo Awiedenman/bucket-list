@@ -13,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.locals.title = 'Bucket List'
 
-
 app.get('/', (request, response) => {
   response.send('Here is my bucket.')
 });
@@ -28,17 +27,23 @@ app.get('/api/v1/bucketList', (request, response) => {
     });
 });
 
-app.post('/ap1/v1/bucketList', (response, request) => {
+app.post('/api/v1/bucketList', (request, response) => {
   const listItem = request.body;
-
+  console.log('body', request.body);
   for (let requiredParams of ['title', 'description']) {
-    if (!bucket_list[requiredParams]) {
+    if (!listItem[requiredParams]) {
       return response.status(422).send(`Missing required information: ${requiredParams}`)
     }
   }
+  console.log({
+  title: listItem.title,
+  description: listItem.description
+  })
+  
   database('bucket_list')
   .insert(listItem)
-  .then(listItem => response.status(201).json(`New List Item ${listItem.title} has been added to the database`))
+  .returning('*')
+  .then((butts) => response.status(201).json(butts))
 })
 
 app.listen(app.get('port'), () => {
