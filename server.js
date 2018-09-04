@@ -28,6 +28,19 @@ app.get('/api/v1/bucketList', (request, response) => {
     });
 });
 
+app.post('/ap1/v1/bucketList', (response, request) => {
+  const listItem = request.body;
+
+  for (let requiredParams of ['title', 'description']) {
+    if (!bucket_list[requiredParams]) {
+      return response.status(422).send(`Missing required information: ${requiredParams}`)
+    }
+  }
+  database('bucket_list')
+  .insert(listItem)
+  .then(listItem => response.status(201).json(`New List Item ${listItem.title} has been added to the database`))
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}`);
 })
