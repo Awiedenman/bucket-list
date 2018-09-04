@@ -7,9 +7,24 @@ module.exports = {
     connection: 'postgres://localhost/bucket_list',
     migrations: {
       directory: './db/migrations'
+    }, 
+    seeds: {
+      directory: './db/seeds/dev'
     },
     useNullAsDefault: true
   },
+
+   test: {
+     client: 'pg',
+     connection: 'postgres://localhost/test_bucket_list',
+     migrations: {
+       directory: './db/migrations'
+     },
+     seeds: {
+       directory: './db/seeds/test'
+     },
+     useNullAsDefault: true,
+   },
 
   staging: {
     client: 'postgresql',
