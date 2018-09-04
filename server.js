@@ -35,25 +35,21 @@ app.post('/api/v1/bucketList', (request, response) => {
       return response.status(422).send(`Missing required information: ${requiredParams}`)
     }
   }
-  console.log({
-  title: listItem.title,
-  description: listItem.description
-  })
-  
   database('bucket_list')
   .insert(listItem)
   .returning('*')
   .then((list_item) => response.status(201).json(list_item))
 })
 
-app.delete('/api/v1/bucketList', (request, response) => {
-  const { id }  = request.body;
+app.delete('/api/v1/bucketList/:id', (request, response) => {
+  const { id }  = request.params;
 
   database('bucket_list').where({
       id: id
     }).del()
-    .then(() => response.status(200).send(`You have successfully deleted ${id} from the beer database.`))
+    .then(() => response.status(204).send(`You have successfully deleted ${id} from the beer database.`))
 })
+
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}`);
