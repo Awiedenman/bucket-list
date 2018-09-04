@@ -34,12 +34,31 @@ const listItemPost = async(event) => {
   }
 }
 
+const listItemDelete = async(event) => {
+  const id = $(event.target).parent().attr('id');
+  try {
+    const url = '/api/v1/bucketList';
+    const response = await fetch(url, {
+      method: 'DELETE',
+      body: JSON.stringify({id}),
+      headers: {
+        "Content-Type": "application/json"
+      }      
+    })
+    $(event.target).parent().remove();
+  } catch(error) {
+      throw Error(`Sorry, we could not delete your list item to the database: ${error.status}`)
+  }
+}
+
 const displayItemsOnLoad = listItems => {
   listItems.forEach(item => {
     $('.list').append(`
-      <h2>title: ${item.title} </h2>
-      <p>description: ${item.description} </p>
-      <button class="card--delete"> Delete </button>
+      <div id= ${item.id}>
+        <h2>title: ${item.title} </h2>
+        <p>description: ${item.description} </p>
+        <button class="card--delete"> Delete </button>
+      </div>
     `)
   })
 }
@@ -49,15 +68,19 @@ const appendListItem = (event, postInfo) => {
   // let titleData = $('.input--title');
   // let descriptionData = $('.input--description');
   $('.list').append(`
-  <h2>title: ${postInfo.title} </h2>
-  <p>description: ${postInfo.description} </p>
-  <button class="card--delete"> Delete </button>
+  <div id= ${item.id}>
+    <h2>title: ${postInfo.title} </h2>
+    <p>description: ${postInfo.description} </p>
+    <button class="card--delete"> Delete </button>
+  </div>
   `)
   $('.input--title').val('');
   $('.input--description').val('');
 }
 
 $('.form--button').on('click', listItemPost);
+$('.list').on('click','.card--delete', listItemDelete);
+
 
 const init = async() => {
   const initialListItems = await listItemRequest();

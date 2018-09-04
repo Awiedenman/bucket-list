@@ -46,6 +46,15 @@ app.post('/api/v1/bucketList', (request, response) => {
   .then((butts) => response.status(201).json(butts))
 })
 
+app.delete('/api/v1/bucketList', (request, response) => {
+  const { id }  = request.body;
+
+  database('bucket_list').where({
+      id: id
+    }).del()
+    .then(() => response.status(200).send(`You have successfully deleted ${id} from the beer database.`))
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}`);
 })
