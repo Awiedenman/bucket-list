@@ -29,7 +29,6 @@ app.get('/api/v1/bucketList', (request, response) => {
 
 app.post('/api/v1/bucketList', (request, response) => {
   const listItem = request.body;
-  console.log('body', request.body);
   for (let requiredParams of ['title', 'description']) {
     if (!listItem[requiredParams]) {
       return response.status(422).send(`Missing required information: ${requiredParams}`)
