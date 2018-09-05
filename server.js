@@ -31,7 +31,7 @@ app.post('/api/v1/bucketList', (request, response) => {
   const listItem = request.body;
   for (let requiredParams of ['title', 'description']) {
     if (!listItem[requiredParams]) {
-      return response.status(422).send(`Missing required information: ${requiredParams}`)
+      return response.status(422).json({error:`Missing required information: ${requiredParams}`})
     }
   }
   database('bucket_list')
@@ -42,12 +42,19 @@ app.post('/api/v1/bucketList', (request, response) => {
 
 app.delete('/api/v1/bucketList/:id', (request, response) => {
   const { id }  = request.params;
-
-  database('bucket_list').where({
-      id: id
-    }).del()
-    .then(() => response.status(204).send(`You have successfully deleted ${id} from the beer database.`))
-})
+  database('bucket_list').where({ id: id }).select()
+    .then(listItems => {
+      if (listItems.length){
+        database('bucket_list').where({ id: id }).del()
+        .then(listItems => response.status(204).json(`You have successfully deleted an item with the id of ${id} from the database.`))
+        .catch(error => {
+          throw response.status(500).json({error});
+        })
+      } else {
+          return response.status(404).json({error: `There is no item in your database with an id of ${id}`})
+      }
+    })
+  })
 
 
 app.listen(app.get('port'), () => {
